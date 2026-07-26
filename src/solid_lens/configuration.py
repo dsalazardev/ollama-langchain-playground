@@ -19,6 +19,7 @@ class SolidLensConfig(BaseModel):
     model: str = "qwen2.5-coder:7b"
     temperature: float = 0.2
     ollama_base_url: str = ""
+    mcp_config_path: str = "mcp_config.json"
 
     @classmethod
     def from_env(cls) -> "SolidLensConfig":

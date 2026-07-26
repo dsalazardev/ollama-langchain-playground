@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
 
@@ -20,6 +22,18 @@ def _build_llm(state: State) -> ChatOllama:
 
 
 def parse_source(state: State) -> dict:
+    if source_path := state.get("source_path"):
+        p = Path(source_path)
+        if not p.is_dir():
+            return {"errors": [f"La ruta '{source_path}' no es un directorio válido"], "language": "unknown"}
+        py_files = sorted(p.rglob("*.py"))
+        if not py_files:
+            return {"errors": [f"No se encontraron archivos .py en '{source_path}'"], "language": "unknown"}
+        parts = []
+        for f in py_files:
+            parts.append(f"# archivo: {f.relative_to(p)}\n{f.read_text()}")
+        return {"source_code": "\n\n".join(parts), "language": "python"}
+
     code = state["source_code"]
     if not code.strip():
         return {"errors": ["El código fuente está vacío"], "language": "unknown"}
@@ -76,6 +90,62 @@ def _analyze_principle(state: State, principle: str) -> dict:
         errors = list(state.get("errors", []))
         errors.append(f"{principle}: {error_msg}")
         return {"results": results, "errors": errors}
+
+
+async def check_dependencies(state: State) -> dict:
+    from src.solid_lens.mcp_client import get_mcp_tools
+
+    tools = get_mcp_tools()
+    if not tools:
+        return {}
+
+    source_code = state.get("source_code", "")
+    imports = set()
+    for line in source_code.split("\n"):
+        stripped = line.strip()
+        if stripped.startswith("import "):
+            parts = stripped.split()
+            if len(parts) >= 2:
+                imports.add(parts[1].split(".")[0])
+        elif stripped.startswith("from "):
+            parts = stripped.split()
+            if len(parts) >= 2:
+                imports.add(parts[1].split(".")[0])
+
+    import_reqs = sorted(imports - {"__future__"})
+    if not import_reqs:
+        dep_warnings = list(state.get("dep_warnings", []))
+        dep_warnings.append("No se detectaron dependencias externas en el código.")
+        return {"dep_warnings": dep_warnings}
+
+    resolve_tool = next((t for t in tools if t.name == "resolve-library-id"), None)
+    query_tool = next((t for t in tools if t.name == "query-docs"), None)
+
+    lines = ["\n## Dependencias\n"]
+    dep_warnings = list(state.get("dep_warnings", []))
+
+    for imp in import_reqs[:5]:
+        try:
+            if resolve_tool:
+                lib_info = await resolve_tool.ainvoke({"libraryName": imp, "query": imp})
+                lib_id = lib_info if isinstance(lib_info, str) else str(lib_info)
+                dep_warnings.append(f"{imp}: ID obtenido de Context7")
+                lines.append(f"- **{imp}**: consultado en Context7 (ID: `{lib_id[:60]}`)")
+
+            if query_tool and lib_id:
+                docs = await query_tool.ainvoke({"libraryId": lib_id, "query": "latest version and API"})
+                content = docs if isinstance(docs, str) else str(docs)
+                lines.append(f"  - Documentación: {content[:200]}")
+        except Exception as e:
+            dep_warnings.append(f"{imp}: error al consultar Context7 — {e}")
+            lines.append(f"- **{imp}**: error — {e}")
+
+    lines.append("")
+
+    report = state.get("report", "")
+    report += "\n".join(lines)
+
+    return {"report": report, "dep_warnings": dep_warnings}
 
 
 def analyze_srp(state: State) -> dict:

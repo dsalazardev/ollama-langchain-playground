@@ -132,6 +132,8 @@ ollama-langchain-playground/
 ├── .gitignore
 ├── uv.lock                    # Lock de dependencias
 │
+├── main.py                    # Entrypoint async con --dir y --check-deps
+├── mcp_config.json            # Configuración de servidores MCP
 ├── src/solid_lens/
 │   ├── __init__.py
 │   ├── configuration.py       # SolidLensConfig + loader de .env
@@ -140,7 +142,8 @@ ollama-langchain-playground/
 │   ├── skills/                # Prompts como archivos .md editables
 │   │   ├── solid-principles.md
 │   │   ├── srp.md, ocp.md, lsp.md, isp.md, dip.md
-│   ├── nodes.py               # 7 funciones-nodo del grafo
+│   ├── mcp_client.py          # Cliente MCP (Context7, etc.)
+│   ├── nodes.py               # 8 funciones-nodo del grafo (+check_dependencies async)
 │   └── graph.py               # StateGraph assembly + export
 │
 ├── openspec/changes/archive/  # OpenSpec artifacts (propuesta, diseño, tareas)
@@ -159,7 +162,8 @@ ollama-langchain-playground/
 | `state.py` | `State` (TypedDict) define el contrato de datos que fluye por el grafo. `AnalysisResult` encapsula hallazgo por principio |
 | `skills.py` | Loader de archivos `.md` con `@lru_cache`. `load_skill(name)` lee de `skills/` y cachea en memoria |
 | `skills/` | Archivos `.md` editables con frontmatter YAML. Cada principio tiene su propio archivo con heurísticas y formato de respuesta |
-| `nodes.py` | Implementa 7 funciones-nodo puras. Cada `analyze_*` carga su prompt via `skills.load_skill()`, lo combina con el contexto filosófico, y lo envía a `ChatOllama` |
+| `mcp_client.py` | Gestiona conexiones MCP: `load_mcp_config()`, `create_mcp_client()`, `get_mcp_tools()` |
+| `nodes.py` | Implementa 8 funciones-nodo (7 sync + 1 async). Cada `analyze_*` carga su prompt via `skills.load_skill()`. `check_dependencies` usa Context7 MCP |
 | `graph.py` | Ensambla el `StateGraph`, define las aristas secuenciales, el enrutamiento condicional, y exporta `app` compilado |
 | `main.py` | Punto de entrada: construye `SolidLensConfig`, invoca el grafo con código de ejemplo, imprime el reporte |
 
@@ -265,11 +269,52 @@ uv sync
 # 2. Configurar .env con tu endpoint de Ollama
 echo "OLLAMA_BASE_URL=http://192.168.1.4:11434" > .env
 
-# 3. Ejecutar el análisis
+# 3. Ejecutar el análisis con código de ejemplo
 uv run python main.py
+
+# 4. Analizar un proyecto real desde el disco
+uv run python main.py --dir /ruta/al/proyecto
+
+# 5. Analizar y verificar dependencias (requiere CONTEXT7_API_KEY)
+uv run python main.py --dir /ruta/al/proyecto --check-deps
 ```
 
-El pipeline usa un `SAMPLE_CODE` incluido en `main.py` que contiene violaciones de todos los principios SOLID. Para analizar tu propio código, reemplaza `SAMPLE_CODE` en `main.py` o modifica el `initial_state`.
+### Flags disponibles
+
+| Flag | Descripción |
+|------|-------------|
+| `--dir PATH` | Ruta al proyecto a analizar. Descubre archivos `.py` recursivamente |
+| `--check-deps` | Verifica dependencias del código contra Context7 MCP (opt-in, consume cuota API) |
+
+Sin flags, el pipeline usa `SAMPLE_CODE` incluido en `main.py` que contiene violaciones de todos los principios SOLID.
+
+## Integración MCP
+
+SolidLens soporta el Model Context Protocol (MCP) para consultar documentación de librerías. La configuración de servidores MCP se declara en `mcp_config.json`:
+
+```json
+{
+  "mcpServers": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "CONTEXT7_API_KEY": "${CONTEXT7_API_KEY}"
+      }
+    }
+  }
+}
+```
+
+Las API keys se definen en `.env`, no en el JSON. El flag `--check-deps` activa la verificación de dependencias vía Context7.
+
+### MCP Client
+
+El módulo `src/solid_lens/mcp_client.py` gestiona:
+- `load_mcp_config()` — lee y resuelve variables de entorno de `mcp_config.json`
+- `create_mcp_client()` — inicializa `MultiServerMCPClient` y obtiene tools MCP
+- `get_mcp_tools()` — devuelve las tools cacheadas para usarlas en nodos del grafo
+- `close_mcp_client()` — limpia los recursos del cliente
 
 ---
 

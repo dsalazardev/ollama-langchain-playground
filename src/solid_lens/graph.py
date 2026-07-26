@@ -6,9 +6,11 @@ from src.solid_lens.nodes import (
     analyze_lsp,
     analyze_ocp,
     analyze_srp,
+    check_dependencies,
     generate_report,
     parse_source,
 )
+from src.solid_lens.mcp_client import get_mcp_tools
 from src.solid_lens.state import State
 
 
@@ -16,6 +18,12 @@ def _router_after_parse(state: State) -> str:
     if state.get("errors") and any("empty" in e.lower() for e in state["errors"]):
         return END
     return "analyze_srp"
+
+
+def _router_after_report(state: State) -> str:
+    if get_mcp_tools():
+        return "check_dependencies"
+    return END
 
 
 def build_graph() -> StateGraph:
@@ -28,6 +36,7 @@ def build_graph() -> StateGraph:
     builder.add_node("analyze_isp", analyze_isp)
     builder.add_node("analyze_dip", analyze_dip)
     builder.add_node("generate_report", generate_report)
+    builder.add_node("check_dependencies", check_dependencies)
 
     builder.set_entry_point("parse_source")
     builder.add_conditional_edges("parse_source", _router_after_parse)
@@ -36,7 +45,8 @@ def build_graph() -> StateGraph:
     builder.add_edge("analyze_lsp", "analyze_isp")
     builder.add_edge("analyze_isp", "analyze_dip")
     builder.add_edge("analyze_dip", "generate_report")
-    builder.add_edge("generate_report", END)
+    builder.add_conditional_edges("generate_report", _router_after_report)
+    builder.add_edge("check_dependencies", END)
 
     return builder
 

@@ -12,8 +12,10 @@ class AnalysisResult(TypedDict):
 
 class State(TypedDict):
     source_code: str
+    source_path: str | None
     language: str
     config: SolidLensConfig
     results: dict[str, AnalysisResult]
     report: str
     errors: list[str]
+    dep_warnings: list[str]
