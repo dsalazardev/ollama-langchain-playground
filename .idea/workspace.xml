@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="ALL" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5ba9d05a-b88e-40e5-8989-b2fb5c8fb2a0" name="Changes" comment="" />
+    <list default="true" id="5ba9d05a-b88e-40e5-8989-b2fb5c8fb2a0" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/solid_lens/nodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/solid_lens/nodes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/solid_lens/prompts.py" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,25 +37,29 @@
     &quot;accountId&quot;: &quot;4e6c8bbf-78d3-43a5-928a-aafa69e95133&quot;
   }
 }</component>
+  <component name="McpProjectServerCommands">
+    <commands />
+    <urls />
+  </component>
   <component name="NextEditCompletionFeaturesState">
     <decayedCancelled>
-      <entry key="MS100" value="1.000000000000002" />
-      <entry key="MS500" value="1.0011390135391856" />
-      <entry key="S2" value="1.1883971252836174" />
-      <entry key="S5" value="1.624803691543967" />
-      <entry key="S10" value="2.0546942794561875" />
-      <entry key="S30" value="2.59259148187292" />
-      <entry key="S60" value="2.781389806214489" />
-      <entry key="M2" value="2.88665183241159" />
-      <entry key="M5" value="2.9536466126151435" />
-      <entry key="M10" value="2.9766504924572708" />
-      <entry key="M15" value="2.9843949721878777" />
-      <entry key="M30" value="2.99217806925261" />
-      <entry key="H1" value="2.996084166844833" />
-      <entry key="H2" value="2.998040864776323" />
-      <entry key="H4" value="2.9990201275137762" />
-      <entry key="D1" value="2.9998366455572185" />
-      <entry key="W1" value="2.999976662613365" />
+      <entry key="MS100" value="1.4970797148672266" />
+      <entry key="MS500" value="2.3234004182089256" />
+      <entry key="S2" value="2.942688259137279" />
+      <entry key="S5" value="3.4889226082133438" />
+      <entry key="S10" value="3.969214602173076" />
+      <entry key="S30" value="4.556852637807308" />
+      <entry key="S60" value="4.76225061140859" />
+      <entry key="M2" value="4.876728258122631" />
+      <entry key="M5" value="4.949587058801333" />
+      <entry key="M10" value="4.974605241723982" />
+      <entry key="M15" value="4.98302799867453" />
+      <entry key="M30" value="4.991492837303094" />
+      <entry key="H1" value="4.99574111293655" />
+      <entry key="H2" value="4.997869228133709" />
+      <entry key="H4" value="4.998934281744672" />
+      <entry key="D1" value="4.9998223341146595" />
+      <entry key="W1" value="4.999974618028128" />
     </decayedCancelled>
     <decayedSelected>
       <entry key="MS100" value="0.0" />
@@ -70,23 +81,23 @@
       <entry key="W1" value="0.0" />
     </decayedSelected>
     <decayedShown>
-      <entry key="MS100" value="0.02720470510300397" />
-      <entry key="MS500" value="0.4869455189343687" />
-      <entry key="S2" value="0.99477021923121" />
-      <entry key="S5" value="1.4915147617002606" />
-      <entry key="S10" value="1.9445457885647237" />
-      <entry key="S30" value="2.533209504919702" />
-      <entry key="S60" value="2.74732515500644" />
-      <entry key="M2" value="2.8683653332596544" />
-      <entry key="M5" value="2.946007965419909" />
-      <entry key="M10" value="2.972775127839191" />
-      <entry key="M15" value="2.9817987874159853" />
-      <entry key="M30" value="2.99087363357381" />
-      <entry key="H1" value="2.9954303558094812" />
-      <entry key="H2" value="2.997713560034634" />
-      <entry key="H4" value="2.998856375221085" />
-      <entry key="D1" value="2.9998093396205596" />
-      <entry key="W1" value="2.999972761425031" />
+      <entry key="MS100" value="0.6996276687213916" />
+      <entry key="MS500" value="1.6103879493011861" />
+      <entry key="S2" value="2.6242233137667887" />
+      <entry key="S5" value="3.297996069077975" />
+      <entry key="S10" value="3.8287616716374235" />
+      <entry key="S30" value="4.486576225612728" />
+      <entry key="S60" value="4.722556841180222" />
+      <entry key="M2" value="4.855571454832464" />
+      <entry key="M5" value="4.94078535333891" />
+      <entry key="M10" value="4.970145717251749" />
+      <entry key="M15" value="4.980041778495656" />
+      <entry key="M30" value="4.989993083400773" />
+      <entry key="H1" value="4.994989567136362" />
+      <entry key="H2" value="4.997493037030591" />
+      <entry key="H4" value="4.998746081518273" />
+      <entry key="D1" value="4.999790952861544" />
+      <entry key="W1" value="4.999970134635538" />
     </decayedShown>
   </component>
   <component name="ProjectColorInfo">{
@@ -102,6 +113,7 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.main.executor": "Run",
+    "RunOnceActivity.MCP Project settings loaded": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
@@ -131,8 +143,9 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="uv (ollama-langchain-playground)" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
+      <option name="IS_MODULE_SDK" value="false" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="DEBUG_JUST_MY_CODE" value="false" />
@@ -156,8 +169,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-31caf2ab9e3c-JavaScript-PY-261.26222.68" />
-        <option value="bundled-python-sdk-50341a9f1f9c-c2ffad84badb-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-261.26222.68" />
+        <option value="bundled-js-predefined-d6986cc7102b-4abd2a77f808-JavaScript-PY-262.8665.309" />
+        <option value="bundled-python-sdk-c6d794e1806d-5bd6d13a2a75-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-262.8665.309" />
       </set>
     </attachedChunks>
   </component>
@@ -171,6 +184,10 @@
       <workItem from="1784479327064" duration="79000" />
       <workItem from="1784583030673" duration="729000" />
       <workItem from="1784583865198" duration="1609000" />
+      <workItem from="1784747964742" duration="1220000" />
+      <workItem from="1784804914984" duration="6000" />
+      <workItem from="1785087940779" duration="2054000" />
+      <workItem from="1785093741522" duration="459000" />
     </task>
     <servers />
   </component>
@@ -178,6 +195,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/ollama_langchain_playground$main.coverage" NAME="main Coverage Results" MODIFIED="1784585286023" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/ollama_langchain_playground$main.coverage" NAME="main Coverage Results" MODIFIED="1785093807224" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

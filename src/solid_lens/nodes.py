@@ -1,7 +1,7 @@
 from langchain_core.messages import HumanMessage, SystemMessage
 from langchain_ollama import ChatOllama
 
-from src.solid_lens.prompts import SYSTEM_PROMPTS
+from src.solid_lens.skills import load_skill
 from src.solid_lens.state import AnalysisResult, State
 
 STATUS_MAP: dict[str, str] = {
@@ -30,11 +30,18 @@ def parse_source(state: State) -> dict:
 def _analyze_principle(state: State, principle: str) -> dict:
     try:
         llm = _build_llm(state)
-        prompt = SYSTEM_PROMPTS[principle]
-        messages = [
-            SystemMessage(content=prompt),
-            HumanMessage(content=f"Analiza este código en busca de violaciones de {principle.upper()}:\n\n```\n{state['source_code']}\n```"),
-        ]
+        skill_prompt = load_skill(principle)
+
+        try:
+            philosophy = load_skill("solid-principles")
+        except FileNotFoundError:
+            philosophy = ""
+
+        messages = []
+        if philosophy:
+            messages.append(SystemMessage(content=philosophy))
+        messages.append(SystemMessage(content=skill_prompt))
+        messages.append(HumanMessage(content=f"Analiza este código en busca de violaciones de {principle.upper()}:\n\n```\n{state['source_code']}\n```"))
         response = llm.invoke(messages)
         content = response.content if hasattr(response, "content") else str(response)
 

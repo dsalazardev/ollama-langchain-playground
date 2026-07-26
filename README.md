@@ -22,7 +22,10 @@ SolidLens es un pipeline orquestado que recibe código fuente, lo analiza contra
 src/solid_lens/
 ├── configuration.py   → Pydantic + loader de .env
 ├── state.py           → TypedDicts del grafo
-├── prompts.py         → 6 system prompts en español
+├── skills.py          → Loader de archivos .md con cache
+├── skills/            → Prompts como archivos .md editables
+│   ├── solid-principles.md  → Contexto filosófico SOLID
+│   ├── srp.md, ocp.md, lsp.md, isp.md, dip.md  → 5 principios
 ├── nodes.py           → 7 funciones-nodo
 └── graph.py           → StateGraph assembly + compile
 ```
@@ -133,7 +136,10 @@ ollama-langchain-playground/
 │   ├── __init__.py
 │   ├── configuration.py       # SolidLensConfig + loader de .env
 │   ├── state.py               # State, AnalysisResult (TypedDicts)
-│   ├── prompts.py             # 6 system prompts en español
+│   ├── skills.py              # Loader de archivos .md con cache
+│   ├── skills/                # Prompts como archivos .md editables
+│   │   ├── solid-principles.md
+│   │   ├── srp.md, ocp.md, lsp.md, isp.md, dip.md
 │   ├── nodes.py               # 7 funciones-nodo del grafo
 │   └── graph.py               # StateGraph assembly + export
 │
@@ -151,10 +157,56 @@ ollama-langchain-playground/
 |---------|-----------------|
 | `configuration.py` | Define el modelo Pydantic `SolidLensConfig` con `model`, `temperature`, `ollama_base_url`. Carga `.env` automáticamente |
 | `state.py` | `State` (TypedDict) define el contrato de datos que fluye por el grafo. `AnalysisResult` encapsula hallazgo por principio |
-| `prompts.py` | Contiene los 6 system prompts en español con formato estructurado `ESTADO: / HALLAZGOS: / SUGERENCIAS:` |
-| `nodes.py` | Implementa 7 funciones-nodo puras. Cada `analyze_*` crea su propio `ChatOllama`, lo invoca y parsea la respuesta |
+| `skills.py` | Loader de archivos `.md` con `@lru_cache`. `load_skill(name)` lee de `skills/` y cachea en memoria |
+| `skills/` | Archivos `.md` editables con frontmatter YAML. Cada principio tiene su propio archivo con heurísticas y formato de respuesta |
+| `nodes.py` | Implementa 7 funciones-nodo puras. Cada `analyze_*` carga su prompt via `skills.load_skill()`, lo combina con el contexto filosófico, y lo envía a `ChatOllama` |
 | `graph.py` | Ensambla el `StateGraph`, define las aristas secuenciales, el enrutamiento condicional, y exporta `app` compilado |
 | `main.py` | Punto de entrada: construye `SolidLensConfig`, invoca el grafo con código de ejemplo, imprime el reporte |
+
+---
+
+## Sistema de Skills
+
+SolidLens utiliza un sistema de skills basado en archivos Markdown, inspirado en el patrón de LangChain Skills. Cada prompt de análisis reside en su propio archivo `.md` dentro de `src/solid_lens/skills/`.
+
+### ¿Por qué archivos .md en vez de código Python?
+
+| Antes (`prompts.py`) | Ahora (`skills/`) |
+|----------------------|-------------------|
+| Editar requería abrir Python y no romper sintaxis | Editar .md con cualquier editor de texto |
+| Solo programadores podían modificar prompts | Investigadores del semillero pueden iterar contenido |
+| Git diff denso y difícil de revisar | Diff claro, línea por línea |
+| Sin cache de lectura | `@lru_cache` evita leer disco en cada invocación |
+
+### Arquitectura del loader
+
+```
+nodes.py                             skills/ (filesystem)
+  _analyze_principle()              
+    │                               
+    ├─ load_skill("srp") ──────►    skills/srp.md ──► str
+    │     (cache miss → disco)       
+    ├─ load_skill("solid-principles") ──► skills/solid-principles.md ──► str
+    │                               
+    ├─ SystemMessage(filosofía)      ← contexto base opcional
+    ├─ SystemMessage(skill_prompt)   ← prompt del principio
+    ├─ HumanMessage(código)          ← código a analizar
+    │                               
+    └─► ChatOllama
+```
+
+### Archivos disponibles
+
+| Skill | Archivo | Propósito |
+|-------|---------|-----------|
+| Filosofía SOLID | `solid-principles.md` | Contexto conceptual cargado en todos los análisis |
+| SRP | `srp.md` | Evaluación de Responsabilidad Única |
+| OCP | `ocp.md` | Evaluación de Abierto/Cerrado |
+| LSP | `lsp.md` | Evaluación de Sustitución de Liskov |
+| ISP | `isp.md` | Evaluación de Segregación de Interfaces |
+| DIP | `dip.md` | Evaluación de Inversión de Dependencias |
+
+Cada skill incluye frontmatter YAML con nombre y descripción, señales de violación (code smells), heurísticas de evaluación, formato de respuesta estructurado, y reglas de formato.
 
 ---
 
