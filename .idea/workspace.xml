@@ -6,14 +6,6 @@
   <component name="ChangeListManager">
     <list default="true" id="5ba9d05a-b88e-40e5-8989-b2fb5c8fb2a0" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pyproject.toml" beforeDir="false" afterPath="$PROJECT_DIR$/pyproject.toml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/solid_lens/configuration.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/solid_lens/configuration.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/solid_lens/graph.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/solid_lens/graph.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/solid_lens/nodes.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/solid_lens/nodes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/solid_lens/state.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/solid_lens/state.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/uv.lock" beforeDir="false" afterPath="$PROJECT_DIR$/uv.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -190,7 +182,7 @@
       <workItem from="1784747964742" duration="1220000" />
       <workItem from="1784804914984" duration="6000" />
       <workItem from="1785087940779" duration="2054000" />
-      <workItem from="1785093741522" duration="2430000" />
+      <workItem from="1785093741522" duration="3872000" />
     </task>
     <servers />
   </component>
